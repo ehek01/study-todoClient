@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import axios from "axios";
 import {host} from "../pages/MainPage";
+import {useDispatch} from "react-redux";
+import {changeRefresh} from "../reducers/TodoSlice";
 
 const postTodo = async (todo) => {
   const {data} = await axios.post(`${host}/todo/add`, todo);
@@ -12,17 +14,18 @@ const initState = {
 }
 
 function TodoAdd(props) {
-
   const [todo, setTodo] = useState({...initState});
+  const dispatch = useDispatch();
 
 
   const onClickBtn = () => {
     postTodo(todo)
       .then((value) => {
-        console.log('추가완료!!');
         setTodo({...initState});
+        dispatch(changeRefresh())
+        console.log('Todo 추가완료!!');
       })
-      .catch(() => {alert('추가를 하는도중 에러가 발생했습니다.')});
+      .catch(() => {alert('Todo를 추가 하는도중 에러가 발생했습니다.')});
   }
 
   const onChangeEvent = (prop, value) => {
